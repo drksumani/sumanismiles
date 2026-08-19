@@ -1,0 +1,9 @@
+- name: Cache Next.js build
+  uses: actions/cache@v4
+  with:
+    path: |
+      ~/.npm
+      ${{ github.workspace }}/.next/cache
+    key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+    restore-keys: |
+      ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
