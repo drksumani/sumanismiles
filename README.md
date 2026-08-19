@@ -107,8 +107,9 @@ Before publishing:
 
 zip_out = Path("/mnt/data/sumani_smiles_website_v2.zip")
 with zipfile.ZipFile(zip_out, "w", zipfile.ZIP_DEFLATED) as z:
-    for p in work.iterdir():
-        z.write(p, p.name)
+    for p in work.rglob("*"):
+        if p.is_file():
+            z.write(p, p.relative_to(work))
 
 print("Created:", zip_out)
 print("Brand: SUMANI SMILES")
