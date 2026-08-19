@@ -3,14 +3,17 @@ import zipfile, shutil, re
 
 zip_in = Path("/mnt/data/all_smiles_dental_website.zip")
 work = Path("/mnt/data/sumani_smiles_website_v2")
+
 if work.exists():
     shutil.rmtree(work)
-work.mkdir()
+work.mkdir(parents=True, exist_ok=True)
 
 with zipfile.ZipFile(zip_in) as z:
     z.extractall(work)
 
-shutil.copy2("/mnt/data/IMG_4962.jpeg", work / "logo.jpeg")
+logo_src = Path("/mnt/data/IMG_4962.jpeg")
+if logo_src.exists():
+    shutil.copy2(logo_src, work / "logo.jpeg")
 
 html_path = work / "index.html"
 css_path = work / "styles.css"
@@ -35,9 +38,6 @@ html = html.replace(old_brand, new_brand)
 
 start = html.find('<div class="contact-card">')
 if start != -1:
-    end = html.find('</div>', html.find('</div>', start) + 1)
-    # Find the closing contact-card by counting divs.
-    pos = start
     depth = 0
     end = None
     for m in re.finditer(r'</?div\b[^>]*>', html[start:]):
@@ -60,8 +60,7 @@ if start != -1:
         </div>'''
         html = html[:start] + card + html[end:]
 
-# Add a visible/clickable phone number before the contact card if not already present.
-if "href=\"tel:+16143837253\"" not in html:
+if 'href="tel:+16143837253"' not in html:
     marker = '<div class="contact-card">'
     html = html.replace(marker, '<a class="phone" href="tel:+16143837253">614-383-7253</a>\n        ' + marker, 1)
 
