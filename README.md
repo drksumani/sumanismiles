@@ -10,7 +10,6 @@ work.mkdir()
 with zipfile.ZipFile(zip_in) as z:
     z.extractall(work)
 
-# Use the uploaded logo again so the package contains the exact logo.
 shutil.copy2("/mnt/data/IMG_4962.jpeg", work / "logo.jpeg")
 
 html_path = work / "index.html"
@@ -34,7 +33,6 @@ new_brand = '''<a class="brand" href="#top" aria-label="Sumani Smiles home">
     </a>'''
 html = html.replace(old_brand, new_brand)
 
-# Replace the contact-card contents.
 start = html.find('<div class="contact-card">')
 if start != -1:
     end = html.find('</div>', html.find('</div>', start) + 1)
